@@ -1,0 +1,70 @@
+.ticket-modal-backdrop{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.ticket-modal{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background: white;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    z-index: 2;
+    max-width: 90%;
+    border-radius: 5px;
+    border: solid 1px rgb(131, 131, 131);
+    padding: 15px;
+}
+
+.ticket-modal-header{
+    display: flex;
+    justify-content:space-between;
+}
+
+.close-ticket-modal-btn{
+    background-color: white;
+    border: none;
+    border-radius: 25px;
+    height: 30px;
+    width: 30px;
+    font-weight: 200;
+    transition: box-shadow 0.25s;
+}
+
+.close-ticket-modal-btn:hover{
+    background-color: rgb(255, 255, 255);
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.238);
+}
+
+.ticket-modal-footer{
+    display: flex;
+    gap: 5px;
+    justify-content: end;
+}
+
+.cancel-ticket-btn{
+    background-color: rgb(214, 214, 214);
+}
+
+.create-ticket-btn{
+    background-color: rgb(66, 104, 255);
+    color: white;
+    font-weight: 500;
+}
+
+.ticket-modal-btn{
+    border-radius: 5px;
+    border: none;
+    padding: 5px 10px 5px 10px;
+    transition: box-shadow 0.25s;
+}
+
+.ticket-modal-btn:hover{
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.238);
+}

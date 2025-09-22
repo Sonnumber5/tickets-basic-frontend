@@ -4,6 +4,8 @@ import './stylesheets/App.css';
 import dataSource from './DataSource';
 import Ticket from './Ticket';
 import TicketFormModal from './TicketFormModal';
+import TicketModal from './TicketModal';
+import React from 'react';
 
 
 function App() {
@@ -12,7 +14,7 @@ function App() {
     const [selectedTicket, setSelectedTicket] = useState(null);
     const [ticketsBuffering, setTicketsBuffering] = useState(true);
     const [ticketSortingMethod, setTicketSortingMethod] = useState('dueDate');
-    const [ticketPriorityFilter, setTicketPriorityFilter] = useState('ALL');
+    const [ticketPriorityFilter, setTicketPriorityFilter] = useState('Select Priority');
     const [showModal, setShowModal] = useState(false);
 
     const loadTickets = async () => {
@@ -83,7 +85,7 @@ function App() {
     };
 
     const resetFilters = () => {
-        setTicketPriorityFilter('ALL');
+        setTicketPriorityFilter('Select Priority');
         setTicketSortingMethod('dueDate');
     };
 
@@ -98,7 +100,7 @@ function App() {
 
     // Update displayed tickets whenever the priority filter changes
     useEffect(() => {
-        if (ticketPriorityFilter === 'ALL') {
+        if (ticketPriorityFilter === 'Select Priority') {
             setTickets(allTickets);
         } else {
             const filtered = allTickets.filter(ticket => ticket.priority === ticketPriorityFilter);
@@ -118,7 +120,7 @@ function App() {
     }, [ticketSortingMethod]);
 
     const formattedTickets = (tickets || []).map((ticket, index) => (
-        <div key={ticket.ticketId} className='ticket-component'>
+            <React.Fragment key={ticket.ticketId}>
             <Ticket
                 ticketId={ticket.ticketId}
                 number={index + 1}
@@ -129,7 +131,7 @@ function App() {
                 deleteTicket={deleteTicket}
                 getTicketById={getTicketById}
             />
-        </div>
+            </React.Fragment>
     ));
 
     const ticketsList = () => {
@@ -176,17 +178,28 @@ function App() {
             </div>
             <div className='body-content-home'>
                 <div className='tickets-section'>
-                    <div className='tickets-menu'></div>
+                    <div className='tickets-menu'>
+                        <div className='tickets-menu-section-1'>
+                            <select className='filter-dropdown' onChange={(e) => {setTicketPriorityFilter(e.target.value)}}>
+                                <option>Select Priority</option>
+                                <option>Low</option>
+                                <option>Medium</option>
+                                <option>High</option>
+                            </select>
+                            <select className='filter-dropdown' onChange={(e) => {setTicketSortingMethod(e.target.value)}}>
+                                <option value={"dueDate"}>Sort By</option>
+                                <option value={"priority"}>Priority ↓</option>
+                                <option value={"dueDate"}>Date ↑</option>
+                            </select>
+                            <button className='reset-filters-btn' onClick={resetFilters}>Reset Filters</button>
+                        </div>
+                        <div className='tickets-menu-section-2'>
+                            <button className="add-ticket-btn" onClick={() => setShowModal(true)}>Add Ticket</button>
+                        </div>
+                    </div>
                     <div className='tickets-list'>
-                        <button onClick={() => {setTicketPriorityFilter('Low')}}>Low</button>
-                        <button onClick={() => {setTicketPriorityFilter('Medium')}}>Medium</button>
-                        <button onClick={() => {setTicketPriorityFilter('High')}}>High</button>
-                        <button onClick={() => {setTicketSortingMethod('priority')}}>Sort By Priority</button>
-                        <button onClick={() => {setTicketSortingMethod('dueDate')}}>Sort By Date</button>
-                        <button onClick={resetFilters}>Reset</button>
-                        <button className="btn btn-success" onClick={() => setShowModal(true)}>Add Ticket</button>
                         {ticketsList()}
-                        <TicketFormModal
+                        <TicketModal
                         updateTicket={updateTicket}
                         selectedTicket={selectedTicket}
                         show={showModal}
