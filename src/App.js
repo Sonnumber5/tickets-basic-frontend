@@ -87,6 +87,7 @@ function App() {
     const resetFilters = () => {
         setTicketPriorityFilter('Select Priority');
         setTicketSortingMethod('dueDate');
+        setTickets(allTickets);
     };
 
     const onModalClose = () => {
@@ -180,13 +181,13 @@ function App() {
                 <div className='tickets-section'>
                     <div className='tickets-menu'>
                         <div className='tickets-menu-section-1'>
-                            <select className='filter-dropdown' onChange={(e) => {setTicketPriorityFilter(e.target.value)}}>
+                            <select className='filter-dropdown' value={ticketPriorityFilter} onChange={(e) => {setTicketPriorityFilter(e.target.value)}}>
                                 <option>Select Priority</option>
                                 <option>Low</option>
                                 <option>Medium</option>
                                 <option>High</option>
                             </select>
-                            <select className='filter-dropdown' onChange={(e) => {setTicketSortingMethod(e.target.value)}}>
+                            <select className='filter-dropdown' value={ticketSortingMethod} onChange={(e) => {setTicketSortingMethod(e.target.value)}}>
                                 <option value={"dueDate"}>Sort By</option>
                                 <option value={"priority"}>Priority ↓</option>
                                 <option value={"dueDate"}>Date ↑</option>
