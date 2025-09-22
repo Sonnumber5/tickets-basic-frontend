@@ -1,0 +1,106 @@
+.ticket-element{
+    width: 100%;
+    background-color: white;
+    border: dotted 1px rgba(0, 0, 0, 0.238);
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.173);
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.ticket-element-info {
+    display: grid;
+    grid-template-columns: 500px 220px; /* Title, Description, Priority, Due Date */
+    gap: 10px;
+    align-items: center;
+}
+
+.ticket-element-btns{
+    display: flex;
+    gap: 8px;
+}
+
+.title-element, .description-element, .priority-element, .due-date-element{
+    width: 100%;
+}
+
+.description-element{
+    padding: 5px;
+    border: solid 1px rgb(214, 214, 214);
+    border-radius: 5px;
+    height: 60px;
+    align-items: center;
+    display: flex;
+    overflow-x: auto;
+}
+
+.due-date-element p, .priority-element p{
+    margin: 0;
+    white-space: nowrap;
+}
+
+.due-date-element, .priority-element{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.section-1, .section-2{
+    display: flex;
+}
+
+.ticket-element-btns button{
+    border-radius: 5px;
+    border: none;
+    padding: 5px 10px 5px 10px;
+    transition: box-shadow 0.25s;
+}
+
+.ticket-element-btns button:hover{
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.238);
+}
+
+.delete-ticket-btn{
+    background-color: rgb(203, 43, 43);
+    color: white;
+}
+
+@media(max-width: 975px){
+    .section-1, .section-2{
+        flex-direction: column;
+        gap: 10px;
+    }
+    .ticket-element-info {
+        grid-template-columns: 450px 100px; /* Title, Description, Priority, Due Date */
+    }
+    .due-date-element, .priority-element{
+        display: flex;
+        align-items: left;
+    }
+    .ticket-element{
+        height: 180px;
+    }
+}
+
+@media(max-width: 788px){
+    .ticket-element-btns{
+        flex-direction: column;
+    }
+}
+
+@media(max-width: 729px){
+    .ticket-element-info {
+        grid-template-columns: 330px; /* Title, Description, Priority, Due Date */
+    }
+    .section-2{
+        flex-direction: row;
+    }
+    .title-element h5{
+        text-align: center;
+    }
+}
