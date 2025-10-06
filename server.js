@@ -3,19 +3,19 @@ const path = require('path');
 const port = process.env.PORT || 8080;
 const app = express();
 
-app.use(express.static(_dirname));
-app.use(express.static(path.join(_dirname, 'build')));
+// Serve static files from the React build folder
+app.use(express.static(path.join(__dirname, 'build')));
 
-app.get('/ping', function (req, res)
-{
-    return res.send('pong');
+// Optional health check
+app.get('/ping', (req, res) => {
+  res.send('pong');
 });
 
-app.get('/*', function (req, res)
-{
-    res.sendFiles(path.join(_dirname, 'build', 'index.html'));
+// All other requests return React's index.html
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-app.listen(port, function (){
-    console.info('React Server App listening on port ' + port);
+app.listen(port, () => {
+  console.info('React Server App listening on port ' + port);
 });
