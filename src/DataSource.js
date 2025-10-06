@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export default axios.create({
-    baseURL: 'https://tickets-backend-6d175b2973bf.herokuapp.com'
+    baseURL: 'https://tickets-backend-de0eb2ec7823.herokuapp.com'
 });
