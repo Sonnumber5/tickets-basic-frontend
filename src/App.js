@@ -207,7 +207,6 @@ function App() {
                                 <option value={"dueDate"}>Date ↑</option>
                             </select>
                             <button className='reset-filters-btn' onClick={resetFilters}>Reset Filters</button>
-                            <button className='reset-filters-btn'>Another New Button</button>
                             {/*<button className='reset-filters-btn'>Another New Button</button>*/}
 
                         </div>
