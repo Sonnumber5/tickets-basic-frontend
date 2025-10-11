@@ -18,6 +18,7 @@ function App() {
     const [showModal, setShowModal] = useState(false);
 
     const loadTickets = async () => {
+        setTicketsBuffering(true);
         try {
             const response = await dataSource.get('/tickets');
             const fetchedTickets = response.data;
@@ -29,47 +30,60 @@ function App() {
     
             setAllTickets(sortedTickets);
             setTickets(sortedTickets);
-            setTicketsBuffering(false);
         } catch (err) {
             console.log("Error loading tickets", err);
+        } finally{
+            setTicketsBuffering(false);
         }
     };
 
     const getTicketById = async (ticketId) => {
+        setTicketsBuffering(true);
         try {
             const response = await dataSource.get(`/tickets/${ticketId}`);
             setSelectedTicket(response.data);
             setShowModal(true);
         } catch (err) {
             console.log('Error retrieving selected ticket', err);
+        } finally{
+            setTicketsBuffering(false);
         }
     };
 
     const createTicket = async (ticket) => {
+        setTicketsBuffering(true);
         try {
             await dataSource.post('/tickets', ticket);
             loadTickets();
         } catch (err) {
             console.log("Error creating ticket", err);
+        } finally{
+            setTicketsBuffering(false);
         }
     };
 
     const updateTicket = async (ticket, ticketId) => {
+        setTicketsBuffering(true);
         try {
             await dataSource.put(`/tickets/${ticketId}`, ticket);
             loadTickets();
         } catch (err) {
             console.log("Error updating ticket", err);
+        } finally{
+            setTicketsBuffering(false);
         }
     };
 
     const deleteTicket = async (ticketId) => {
+        setTicketsBuffering(true);
         try {
             await dataSource.delete(`/tickets/${ticketId}`);
             setTickets((prev) => prev.filter((t) => t.ticketId !== ticketId));
             setAllTickets((prev) => prev.filter((t) => t.ticketId !== ticketId));
         } catch (err) {
             console.log('Error deleting ticket', err);
+        } finally{
+            setTicketsBuffering(false);
         }
     };
 
@@ -193,6 +207,7 @@ function App() {
                                 <option value={"dueDate"}>Date ↑</option>
                             </select>
                             <button className='reset-filters-btn' onClick={resetFilters}>Reset Filters</button>
+                            {/*<button className='reset-filters-btn'>New Button</button>*/}
                         </div>
                         <div className='tickets-menu-section-2'>
                             <button className="add-ticket-btn" onClick={() => setShowModal(true)}>Add Ticket</button>
