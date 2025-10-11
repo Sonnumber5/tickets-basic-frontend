@@ -207,7 +207,11 @@ function App() {
                                 <option value={"dueDate"}>Date ↑</option>
                             </select>
                             <button className='reset-filters-btn' onClick={resetFilters}>Reset Filters</button>
+<<<<<<< HEAD
                             <button className='reset-filters-btn'>Another New Button</button>
+=======
+                            {/*<button className='reset-filters-btn'>Another New Button</button>*/}
+>>>>>>> 4bb48ac (button update)
                         </div>
                         <div className='tickets-menu-section-2'>
                             <button className="add-ticket-btn" onClick={() => setShowModal(true)}>Add Ticket</button>
