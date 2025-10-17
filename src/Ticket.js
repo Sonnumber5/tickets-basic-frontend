@@ -2,16 +2,19 @@ import React from "react";
 import "./stylesheets/Ticket.css";
 
 function Ticket(props) {
+  // Map priority levels to Bootstrap badge color classes
   const priorityColors = {
     Low: "success",
     Medium: "warning",
     High: "danger",
   };
 
+  // Trigger parent delete function with this ticket's ID
   const onDeleteTicket = () => {
     props.deleteTicket(props.ticketId);
   }
 
+  // Trigger parent getTicketById function for editing
   const onEditTicket = () => {
     props.getTicketById(props.ticketId);
   }
@@ -47,6 +50,7 @@ function Ticket(props) {
                 </div>
             </div>
         </div>
+
         <div className="ticket-element-btns">
             <button className="edit-ticket-btn" onClick={onEditTicket}>Edit</button>
             <button className="delete-ticket-btn" onClick={onDeleteTicket}>Delete</button>

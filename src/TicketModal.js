@@ -3,18 +3,22 @@ import { useState, useEffect } from "react";
 import "./stylesheets/TicketModal.css";
 
 const TicketModal = (props) => {
+    // Local state for form inputs
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [priority, setPriority] = useState('Low');
     const [dueDate, setDueDate] = useState('');
 
+    // When modal opens or selectedTicket changes, prefill form OR reset
     useEffect(() => {
         if (props.selectedTicket){
+            // Editing existing ticket — populate form
             setTitle(props.selectedTicket.title);
             setDescription(props.selectedTicket.description);
             setPriority(props.selectedTicket.priority);
             setDueDate(props.selectedTicket.dueDate);
         } else{
+            // Creating new ticket — clear form
             setTitle("");
             setDescription("");
             setPriority("Low");
@@ -22,28 +26,34 @@ const TicketModal = (props) => {
         }
     }, [props.selectedTicket, props.show]);
 
+    // Don't render anything if modal is not visible
     if (props.show === false){
         return null;
     }
 
+    // Submit handler for create/update actions
     const handleSubmit = (e) => {
         e.preventDefault();
         if (props.selectedTicket){
+            // Update existing ticket
             props.updateTicket({title, description, priority, dueDate}, props.selectedTicket.ticketId);
         } else{
+            // Create new ticket
             props.createTicket({title, description, priority, dueDate});
         }
-        props.onClose();
+        props.onClose(); // Close modal after submit
     }
 
     return (
         <>
         <div className="ticket-modal-backdrop" onClick={props.onClose}></div>
+
         <div className="ticket-modal">
             <div className="ticket-modal-header">
                 <h3>{props.selectedTicket?.title || "New Ticket"}</h3>
                 <button className="close-ticket-modal-btn" onClick={props.onClose}>X</button>
             </div>
+
             <div className="ticket-modal-body">
                 <form onSubmit={handleSubmit}>
                 <div className="modal-body">
@@ -51,6 +61,7 @@ const TicketModal = (props) => {
                     <label className="form-label">Title</label>
                     <input type="text" className="form-control" value={title} onChange={(e) => {setTitle(e.target.value)}}/>
                     </div>
+
                     <div className="mb-3">
                     <label className="form-label">Description</label>
                     <textarea
@@ -60,6 +71,7 @@ const TicketModal = (props) => {
                         required
                     />
                     </div>
+
                     <div className="mb-3">
                     <label className="form-label">Priority</label>
                     <select
@@ -72,6 +84,7 @@ const TicketModal = (props) => {
                         <option>High</option>
                     </select>
                     </div>
+
                     <div className="mb-3">
                     <label className="form-label">Due Date</label>
                     <input
@@ -83,6 +96,7 @@ const TicketModal = (props) => {
                     />
                     </div>
                 </div>
+
                 <div className="ticket-modal-footer">
                     <button
                     type="button"
@@ -91,6 +105,7 @@ const TicketModal = (props) => {
                     >
                     Cancel
                     </button>
+
                     <button type="submit" className="ticket-modal-btn create-ticket-btn">
                     {props.selectedTicket ? "Save Changes" : "Add Ticket"}
                     </button>

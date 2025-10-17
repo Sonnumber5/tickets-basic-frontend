@@ -1,14 +1,13 @@
-import logo from './logo.svg';
 import { useState, useEffect } from 'react';
 import './stylesheets/App.css';
 import dataSource from './DataSource';
 import Ticket from './Ticket';
-import TicketFormModal from './TicketFormModal';
 import TicketModal from './TicketModal';
 import React from 'react';
 
 
 function App() {
+    //State variables
     const [allTickets, setAllTickets] = useState([]);
     const [tickets, setTickets] = useState([]); 
     const [selectedTicket, setSelectedTicket] = useState(null);
@@ -17,13 +16,14 @@ function App() {
     const [ticketPriorityFilter, setTicketPriorityFilter] = useState('Select Priority');
     const [showModal, setShowModal] = useState(false);
 
+    // Fetch all tickets from backend
     const loadTickets = async () => {
         setTicketsBuffering(true);
         try {
             const response = await dataSource.get('/tickets');
             const fetchedTickets = response.data;
     
-            // Sort by dueDate immediately
+            // Default sort by due date immediately
             const sortedTickets = [...fetchedTickets].sort((a, b) => {
                 return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
             });
@@ -37,24 +37,23 @@ function App() {
         }
     };
 
+    // Retrieve a single ticket by ID for editing/viewing
     const getTicketById = async (ticketId) => {
-        setTicketsBuffering(true);
         try {
             const response = await dataSource.get(`/tickets/${ticketId}`);
             setSelectedTicket(response.data);
             setShowModal(true);
         } catch (err) {
             console.log('Error retrieving selected ticket', err);
-        } finally{
-            setTicketsBuffering(false);
         }
     };
 
+    // Create a new ticket
     const createTicket = async (ticket) => {
         setTicketsBuffering(true);
         try {
             await dataSource.post('/tickets', ticket);
-            loadTickets();
+            loadTickets(); // Refresh full list
         } catch (err) {
             console.log("Error creating ticket", err);
         } finally{
@@ -62,11 +61,12 @@ function App() {
         }
     };
 
+    // Update existing ticket
     const updateTicket = async (ticket, ticketId) => {
         setTicketsBuffering(true);
         try {
             await dataSource.put(`/tickets/${ticketId}`, ticket);
-            loadTickets();
+            loadTickets(); // Refresh full list
         } catch (err) {
             console.log("Error updating ticket", err);
         } finally{
@@ -74,6 +74,7 @@ function App() {
         }
     };
 
+    // Delete ticket from backend + remove locally
     const deleteTicket = async (ticketId) => {
         setTicketsBuffering(true);
         try {
@@ -87,33 +88,38 @@ function App() {
         }
     };
 
+    // Sort currently displayed tickets by due date
     const sortTicketsByDueDate = () => {
         const sorted = [...tickets].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
         setTickets(sorted);
     };
 
+    // Sort currently displayed tickets by numeric priority
     const sortTicketsByPriority = () => {
         const priorityValues = { Low: 1, Medium: 2, High: 3 };
         const sorted = [...tickets].sort((a, b) => priorityValues[b.priority] - priorityValues[a.priority]);
         setTickets(sorted);
     };
 
+    // Reset all filters & sorting to defaults
     const resetFilters = () => {
         setTicketPriorityFilter('Select Priority');
         setTicketSortingMethod('dueDate');
         setTickets(allTickets);
     };
 
+    // Close modal and clear selected ticket
     const onModalClose = () => {
         setShowModal(false);
         setSelectedTicket(null);
     };
 
+    // Load tickets on first render
     useEffect(() => {
         loadTickets();
     }, []);
 
-    // Update displayed tickets whenever the priority filter changes
+    // React to changes in priority filter
     useEffect(() => {
         if (ticketPriorityFilter === 'Select Priority') {
             setTickets(allTickets);
@@ -123,7 +129,7 @@ function App() {
         }
     }, [ticketPriorityFilter, allTickets]);
 
-    // Update displayed tickets whenever sorting method changes
+    // React to changes in sorting method
     useEffect(() => {
         if (!tickets.length) return;
 
@@ -134,6 +140,7 @@ function App() {
         }
     }, [ticketSortingMethod]);
 
+    // Render a mapped list of Ticket components
     const formattedTickets = (tickets || []).map((ticket, index) => (
             <React.Fragment key={ticket.ticketId}>
             <Ticket
@@ -149,6 +156,7 @@ function App() {
             </React.Fragment>
     ));
 
+    // Display loading state or ticket list
     const ticketsList = () => {
         if (ticketsBuffering) {
             return (
@@ -160,10 +168,6 @@ function App() {
             return formattedTickets;
         }
     };
-
-    const changePriority = () => {
-        setTicketPriorityFilter('High');
-    }
 
     return (
         <div className="App">
@@ -191,6 +195,7 @@ function App() {
                     </div>
                 </nav>
             </div>
+
             <div className='body-content-home'>
                 <div className='tickets-section'>
                     <div className='tickets-menu'>
@@ -201,11 +206,13 @@ function App() {
                                 <option>Medium</option>
                                 <option>High</option>
                             </select>
+
                             <select className='filter-dropdown' value={ticketSortingMethod} onChange={(e) => {setTicketSortingMethod(e.target.value)}}>
                                 <option value={"dueDate"}>Sort By</option>
                                 <option value={"priority"}>Priority ↓</option>
                                 <option value={"dueDate"}>Date ↑</option>
                             </select>
+
                             <button className='reset-filters-btn' onClick={resetFilters}>Reset Filters</button>
                             <button className='reset-filters-btn'>Another New Button</button>
 
@@ -214,6 +221,7 @@ function App() {
                             <button className="add-ticket-btn" onClick={() => setShowModal(true)}>Add Ticket</button>
                         </div>
                     </div>
+
                     <div className='tickets-list'>
                         {ticketsList()}
                         <TicketModal
